@@ -23,9 +23,3 @@ The "require-dev" section is currently ignored.
 
 The language level is still a global setting. If you have a PHP-7.4 file open next to a PHP-5.6 file, and you focus the
 PHP-5.6 one, errors/warnings will probably show up in the PHP-7.4 file since it tries to apply the PHP version there.
-
-## Next Steps
-
-- project-level setting to disable the plugin
-- considering retrieving the language level from `require-dev` and/or `composer.lock`
-- consider retrieving the language level from the file itself via special-crafted (phpdoc)comments
