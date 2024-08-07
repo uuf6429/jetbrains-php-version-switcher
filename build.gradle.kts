@@ -1,8 +1,9 @@
 import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.9.24"
+    id("org.jetbrains.kotlin.jvm") version "2.0.0"
     id("org.jetbrains.intellij.platform") version "2.0.0"
 }
 
@@ -20,6 +21,7 @@ repositories {
 dependencies {
     intellijPlatform {
         phpstorm("2024.1.4")
+        bundledPlugin("com.jetbrains.php")
 
         pluginVerifier()
         zipSigner()
@@ -34,7 +36,9 @@ tasks {
         targetCompatibility = "17"
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
 
     patchPluginXml {
