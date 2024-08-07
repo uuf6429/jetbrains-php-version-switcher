@@ -4,16 +4,23 @@ import com.intellij.json.psi.JsonStringLiteral
 import com.intellij.openapi.diagnostic.currentClassLogger
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.ex.FocusChangeListener
+import com.intellij.openapi.fileEditor.FileDocumentManager
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.findPsiFile
 import com.jetbrains.php.config.PhpLanguageLevel
 import com.jetbrains.php.config.PhpProjectConfigurationFacade
 import com.jetbrains.php.config.composer.LanguageLevelComposerParser
+import com.jetbrains.php.lang.PhpFileType
 import com.jetbrains.php.lang.inspections.PhpSwitchComposerLanguageLevelQuickFix
 
-class FocusChangeListener(val phpFile: VirtualFile) : FocusChangeListener {
+internal class FocusChangeListener : FocusChangeListener {
     override fun focusGained(editor: Editor) {
+        val phpFile = FileDocumentManager.getInstance().getFile(editor.document)
+        if (phpFile == null || phpFile.fileType != PhpFileType.INSTANCE) {
+            return
+        }
+
         val project = editor.project ?: return
 
         if (phpFile == lastPhpFile) {

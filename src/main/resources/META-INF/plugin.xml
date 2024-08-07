@@ -15,10 +15,6 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="me.sciberras.christian.pvs.ProjectActivity"/>
     </extensions>
-
-    <applicationListeners>
-        <listener class="me.sciberras.christian.pvs.AppLifecycleListener"
-                  topic="com.intellij.ide.AppLifecycleListener"/>
-    </applicationListeners>
 </idea-plugin>
