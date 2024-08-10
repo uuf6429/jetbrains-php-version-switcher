@@ -1,6 +1,7 @@
 package me.sciberras.christian.pvs
 
 import com.intellij.json.psi.JsonStringLiteral
+import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.currentClassLogger
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.editor.ex.FocusChangeListener
@@ -16,6 +17,10 @@ import com.jetbrains.php.lang.inspections.PhpSwitchComposerLanguageLevelQuickFix
 
 internal class FocusChangeListener : FocusChangeListener {
     override fun focusGained(editor: Editor) {
+        if (editor.project?.service<ProjectSettings>()?.state?.enabled != TriState.ENABLED) {
+            return
+        }
+
         val phpFile = FileDocumentManager.getInstance().getFile(editor.document)
         if (phpFile == null || phpFile.fileType != PhpFileType.INSTANCE) {
             return
