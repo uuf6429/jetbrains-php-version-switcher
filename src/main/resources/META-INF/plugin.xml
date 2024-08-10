@@ -16,5 +16,12 @@
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity implementation="me.sciberras.christian.pvs.ProjectActivity"/>
+        <projectConfigurable
+                id="me.sciberras.christian.pvs.ProjectSettingsConfigurable"
+                parentId="language"
+                instance="me.sciberras.christian.pvs.ProjectSettingsConfigurable"
+                displayName="My Project Settings 1"
+                nonDefaultProject="false"/>
+        <applicationService serviceImplementation="me.sciberras.christian.pvs.ProjectSettings"/>
     </extensions>
 </idea-plugin>
