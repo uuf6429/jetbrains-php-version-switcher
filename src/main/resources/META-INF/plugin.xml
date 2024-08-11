@@ -15,14 +15,27 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <postStartupActivity implementation="me.sciberras.christian.pvs.ProjectActivity"/>
+        <postStartupActivity
+                implementation="me.sciberras.christian.pvs.PostProjectStartupActivity"
+        />
+        <backgroundPostStartupActivity
+                implementation="me.sciberras.christian.pvs.BackgroundPostProjectStartupActivity"
+        />
         <projectConfigurable
-                id="me.sciberras.christian.pvs.ProjectSettingsConfigurable"
                 parentId="reference.webide.settings.project.settings.php"
                 key="settings.title"
                 bundle="messages.PVSBundle"
                 instance="me.sciberras.christian.pvs.ProjectSettingsConfigurable"
-                nonDefaultProject="false"/>
-        <applicationService serviceImplementation="me.sciberras.christian.pvs.ProjectSettings"/>
+                nonDefaultProject="false"
+        />
+        <applicationService
+                serviceImplementation="me.sciberras.christian.pvs.ProjectSettings"
+        />
+        <notificationGroup
+                id="PHP Version Switcher"
+                displayType="STICKY_BALLOON"
+                key="notifications.groupName"
+                bundle="messages.PVSBundle"
+        />
     </extensions>
 </idea-plugin>

@@ -17,7 +17,7 @@ import com.jetbrains.php.lang.inspections.PhpSwitchComposerLanguageLevelQuickFix
 
 internal class FocusChangeListener : FocusChangeListener {
     override fun focusGained(editor: Editor) {
-        if (editor.project?.service<ProjectSettings>()?.state?.enabled != TriState.ENABLED) {
+        if (editor.project?.service<ProjectSettings>()?.state?.enabled != true) {
             return
         }
 
