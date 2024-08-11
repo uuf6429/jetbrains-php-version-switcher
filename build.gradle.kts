@@ -1,3 +1,4 @@
+import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -26,6 +27,14 @@ dependencies {
         pluginVerifier()
         zipSigner()
         instrumentationTools()
+    }
+}
+
+intellijPlatform {
+    pluginVerification {
+        ides {
+            ide(IntelliJPlatformType.PhpStorm, "2024.1.4")
+        }
     }
 }
 
