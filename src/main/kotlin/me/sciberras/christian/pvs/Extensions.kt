@@ -1,7 +1,7 @@
 package me.sciberras.christian.pvs
 
 import com.intellij.json.psi.JsonStringLiteral
-import com.intellij.openapi.diagnostic.currentClassLogger
+import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.findPsiFile
@@ -18,7 +18,7 @@ fun VirtualFile.findPhpVersion(project: Project): PhpLanguageLevel? {
                 LanguageLevelComposerParser
                     .getMinRequiredLanguageLevel(
                         this.findComposerPhpProperty(project),
-                        PhpLanguageLevel.PHP830
+                        PhpLanguageLevel.PHP820
                     )
             }
 
@@ -33,7 +33,7 @@ fun VirtualFile.findPhpVersion(project: Project): PhpLanguageLevel? {
             else -> throw RuntimeException("")
         }
     } catch (ex: Throwable) {
-        currentClassLogger().error(ex)
+        thisLogger().error(ex)
         return null
     }
 }
