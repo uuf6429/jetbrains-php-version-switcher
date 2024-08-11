@@ -16,20 +16,19 @@ class ProjectSettingsConfigurable(
     private var enabledField: Cell<ComboBox<TriState>>? = null
 
     override fun getDisplayName(): String {
-        return "My Project Settings 2" // TODO this seems to be unused
+        return Bundle.message("settings.title")
     }
 
     override fun createComponent(): JComponent {
         return panel {
-            row("Refresh language level") {
+            row(Bundle.message("settings.enable.label")) {
                 enabledField = comboBox(
                     TriState.entries,
                     textListCellRenderer {
                         when (it) {
-                            // TODO for localisation, use ApplicationBundle.message("combobox.insert.imports.ask")
-                            TriState.ENABLED -> "Yes"
-                            TriState.DISABLED -> "No"
-                            else -> ""
+                            TriState.ENABLED -> Bundle.message("settings.enable.enabled")
+                            TriState.DISABLED -> Bundle.message("settings.enable.disabled")
+                            else -> Bundle.message("settings.enable.undefined")
                         }
                     }
                 )

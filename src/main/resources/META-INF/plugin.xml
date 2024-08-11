@@ -18,9 +18,10 @@
         <postStartupActivity implementation="me.sciberras.christian.pvs.ProjectActivity"/>
         <projectConfigurable
                 id="me.sciberras.christian.pvs.ProjectSettingsConfigurable"
-                parentId="language"
+                parentId="reference.webide.settings.project.settings.php"
+                key="settings.title"
+                bundle="messages.PVSBundle"
                 instance="me.sciberras.christian.pvs.ProjectSettingsConfigurable"
-                displayName="My Project Settings 1"
                 nonDefaultProject="false"/>
         <applicationService serviceImplementation="me.sciberras.christian.pvs.ProjectSettings"/>
     </extensions>
