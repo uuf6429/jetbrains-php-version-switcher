@@ -7,7 +7,7 @@ editor window is focused, based on the version defined in the nearest `composer.
 That behaviour would be helpful if your project contains PHP code intended to run on different PHP versions
 (PhpStorm/IDEA) or if you are opening multiple projects as modules (IDEA).
 
-![Example](./assets/PVS.mp4)
+https://github.com/user-attachments/assets/db36e668-5f40-4e8d-b69c-62a518c7223a
 
 ## Caveats
 
