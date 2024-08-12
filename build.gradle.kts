@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        phpstorm("2023.2")
+        phpstorm(System.getenv("PHPSTORM_VERSION"))
         bundledPlugin("com.jetbrains.php")
 
         pluginVerifier()
@@ -33,7 +33,7 @@ dependencies {
 intellijPlatform {
     pluginVerification {
         ides {
-            ide(IntelliJPlatformType.PhpStorm, "2023.2")
+            ide(IntelliJPlatformType.PhpStorm, System.getenv("PHPSTORM_VERSION"))
         }
     }
 }
