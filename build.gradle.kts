@@ -19,8 +19,8 @@ repositories {
     }
 }
 
-val ideType = IntelliJPlatformType.fromCode(System.getenv("IDE_TYPE") ?: "PS")
-val ideVersion = System.getenv("IDE_VERSION") ?: "2024.1.1"
+val ideType = IntelliJPlatformType.fromCode(System.getenv("IDE_TYPE") ?: "IU")
+val ideVersion = System.getenv("IDE_VERSION") ?: "2023.2"
 val pluginVersion = mapOf(
     "2023" to "232.8660.185",
     "2024" to "242.20224.387",
