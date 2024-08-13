@@ -19,10 +19,23 @@ repositories {
     }
 }
 
+val ideType = IntelliJPlatformType.fromCode(System.getenv("IDE_TYPE") ?: "PS")
+val ideVersion = System.getenv("IDE_VERSION") ?: "2024.1.1"
+val pluginVersion = mapOf(
+    "2023" to "232.8660.185",
+    "2024" to "242.20224.387",
+)[ideVersion.split('.').first()]
+
 dependencies {
     intellijPlatform {
-        phpstorm(System.getenv("PHPSTORM_VERSION") ?: "2024.1.1")
-        bundledPlugin("com.jetbrains.php")
+        if (ideType === IntelliJPlatformType.PhpStorm) {
+            phpstorm(ideVersion)
+            bundledPlugin("com.jetbrains.php")
+        }
+        if (ideType === IntelliJPlatformType.IntellijIdeaUltimate) {
+            intellijIdeaUltimate(ideVersion)
+            plugin("com.jetbrains.php:$pluginVersion")
+        }
 
         pluginVerifier()
         zipSigner()
@@ -33,7 +46,7 @@ dependencies {
 intellijPlatform {
     pluginVerification {
         ides {
-            ide(IntelliJPlatformType.PhpStorm, System.getenv("PHPSTORM_VERSION") ?: "2024.1.1")
+            ide(ideType, ideVersion)
         }
     }
 }
