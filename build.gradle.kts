@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "me.sciberras.christian"
-version = "1.0.0"
+version = "1.0.1"
 
 repositories {
     mavenCentral()
@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     intellijPlatform {
-        phpstorm(System.getenv("PHPSTORM_VERSION"))
+        phpstorm(System.getenv("PHPSTORM_VERSION") ?: "2024.1.1")
         bundledPlugin("com.jetbrains.php")
 
         pluginVerifier()
@@ -33,7 +33,7 @@ dependencies {
 intellijPlatform {
     pluginVerification {
         ides {
-            ide(IntelliJPlatformType.PhpStorm, System.getenv("PHPSTORM_VERSION"))
+            ide(IntelliJPlatformType.PhpStorm, System.getenv("PHPSTORM_VERSION") ?: "2024.1.1")
         }
     }
 }
