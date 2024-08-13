@@ -38,8 +38,8 @@ fun VirtualFile.findPhpVersion(project: Project): PhpLanguageLevel? {
     }
 }
 
-internal fun VirtualFile.findComposerPhpProperty(project: Project): String {
+internal fun VirtualFile.findComposerPhpProperty(project: Project): String? {
     val psiFile = this.findPsiFile(project)
-    val jsonProp = PhpSwitchComposerLanguageLevelQuickFix.findPhpProperty(psiFile)?.value as JsonStringLiteral
-    return jsonProp.value
+    val jsonProp = PhpSwitchComposerLanguageLevelQuickFix.findPhpProperty(psiFile)?.value as? JsonStringLiteral
+    return jsonProp?.value
 }
