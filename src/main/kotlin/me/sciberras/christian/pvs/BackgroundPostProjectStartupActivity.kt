@@ -12,7 +12,6 @@ import com.intellij.psi.search.FilenameIndex
 import com.intellij.psi.search.GlobalSearchScope
 import com.jetbrains.php.config.PhpLanguageLevel
 
-
 class BackgroundPostProjectStartupActivity : ProjectActivity {
     override suspend fun execute(project: Project) {
         ApplicationManager.getApplication().runReadAction {
@@ -29,7 +28,7 @@ class BackgroundPostProjectStartupActivity : ProjectActivity {
     private fun projectDependsOnMultiplePhpVersions(project: Project): Boolean {
         val vendorPathRegex = Regex("""[/\\]vendor[/\\]""")
         var lastPhpVersion: PhpLanguageLevel? = null
-        var differentVersions = false
+        var foundDifferentVersions = false
 
         FilenameIndex.processFilesByName(
             "composer.json",
@@ -37,7 +36,7 @@ class BackgroundPostProjectStartupActivity : ProjectActivity {
             GlobalSearchScope.projectScope(project)
         ) { file: VirtualFile ->
             // if the composer file is in some vendor directory, skip it
-            if (vendorPathRegex.matches(file.path)) {
+            if (vendorPathRegex.containsMatchIn(file.path)) {
                 return@processFilesByName true
             }
 
@@ -48,7 +47,7 @@ class BackgroundPostProjectStartupActivity : ProjectActivity {
                 return@processFilesByName true
             }
 
-            // if we have found a php version yet, take this one and continue
+            // if we haven't found a php version yet, take this one and continue
             if (lastPhpVersion == null) {
                 lastPhpVersion = currentPhpVersion
                 return@processFilesByName true
@@ -56,16 +55,15 @@ class BackgroundPostProjectStartupActivity : ProjectActivity {
 
             // if the current php version does not match a previous one, stop here
             if (lastPhpVersion?.name != currentPhpVersion.name) {
-                differentVersions = true
+                foundDifferentVersions = true
                 return@processFilesByName false
             }
 
             return@processFilesByName true
         }
 
-        return differentVersions
+        return foundDifferentVersions
     }
-
 
     private fun showEnablePluginRecommendation(project: Project) {
         NotificationGroupManager.getInstance()
