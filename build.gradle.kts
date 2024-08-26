@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "me.sciberras.christian"
-version = "1.0.2"
+version = "1.0.3"
 
 repositories {
     mavenCentral()
@@ -23,7 +23,7 @@ val ideType = IntelliJPlatformType.fromCode(System.getenv("IDE_TYPE") ?: "IU")
 val ideVersion = System.getenv("IDE_VERSION") ?: "2023.2"
 val pluginVersion = mapOf(
     "2023" to "232.8660.185",
-    "2024" to "242.20224.387",
+    "2024" to "242.20224.427",
 )[ideVersion.split('.').first()]
 
 dependencies {
