@@ -19,7 +19,7 @@ fun VirtualFile.findPhpVersion(project: Project): PhpLanguageLevel? {
                 LanguageLevelComposerParser
                     .getMinRequiredLanguageLevel(
                         this.findComposerPhpProperty(project),
-                        PhpLanguageLevel.PHP820
+                        PhpLanguageLevel.DEFAULT
                     )
             }
 
