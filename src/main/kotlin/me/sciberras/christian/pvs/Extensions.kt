@@ -5,6 +5,7 @@ import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.openapi.vfs.findPsiFile
+import com.intellij.openapi.vfs.isFile
 import com.jetbrains.php.config.PhpLanguageLevel
 import com.jetbrains.php.config.composer.LanguageLevelComposerParser
 import com.jetbrains.php.lang.inspections.PhpSwitchComposerLanguageLevelQuickFix
@@ -15,11 +16,12 @@ fun VirtualFile.findPhpVersion(project: Project): PhpLanguageLevel? {
     try {
         return when {
             this.name == "composer.json" -> {
-                LanguageLevelComposerParser
-                    .getMinRequiredLanguageLevel(
-                        this.findComposerPhpProperty(project),
-                        PhpLanguageLevel.PHP820
-                    )
+                this.findComposerPhpProperty(project)
+                    ?.takeIf { it.isNotBlank() }
+                    ?.run {
+                        LanguageLevelComposerParser
+                            .getMinRequiredLanguageLevel(this, PhpLanguageLevel.DEFAULT)
+                    }
             }
 
             this.name == "composer.lock" -> {
@@ -42,4 +44,18 @@ internal fun VirtualFile.findComposerPhpProperty(project: Project): String? {
     val psiFile = this.findPsiFile(project)
     val jsonProp = PhpSwitchComposerLanguageLevelQuickFix.findPhpProperty(psiFile)?.value as? JsonStringLiteral
     return jsonProp?.value
+}
+
+fun VirtualFile.findNearestFile(fileName: String): VirtualFile? {
+    var directory = this.parent
+
+    while (directory != null) {
+        val targetFile = directory.findChild(fileName)
+        if (targetFile?.isFile == true) {
+            return targetFile
+        }
+        directory = directory.parent
+    }
+
+    return null
 }
