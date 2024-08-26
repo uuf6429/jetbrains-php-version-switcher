@@ -16,11 +16,12 @@ fun VirtualFile.findPhpVersion(project: Project): PhpLanguageLevel? {
     try {
         return when {
             this.name == "composer.json" -> {
-                LanguageLevelComposerParser
-                    .getMinRequiredLanguageLevel(
-                        this.findComposerPhpProperty(project),
-                        PhpLanguageLevel.DEFAULT
-                    )
+                this.findComposerPhpProperty(project)
+                    ?.takeIf { it.isNotBlank() }
+                    ?.run {
+                        LanguageLevelComposerParser
+                            .getMinRequiredLanguageLevel(this, PhpLanguageLevel.DEFAULT)
+                    }
             }
 
             this.name == "composer.lock" -> {
