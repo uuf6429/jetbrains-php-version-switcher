@@ -30,18 +30,28 @@ internal class FocusChangeListener : FocusChangeListener {
         lastPhpFile = phpFile
 
         val composerFile = phpFile.findNearestFile("composer.json")
-        if (composerFile == null || composerFile == lastComposerFile) {
-            thisLogger().debug("Composer file not found in any parent directory")
+        if (composerFile == lastComposerFile) {
             return
         }
+
         lastComposerFile = composerFile
 
+        if (composerFile == null) {
+            thisLogger().debug("Composer file not found in any parent directory of $phpFile")
+            return
+        }
+
         val phpVersion = composerFile.findPhpVersion(project)
-        if (phpVersion == null || phpVersion == lastPhpVersion) {
+        if (phpVersion == lastPhpVersion) {
+            return
+        }
+
+        lastPhpVersion = phpVersion
+
+        if (phpVersion == null) {
             thisLogger().debug("PHP not set as a requirement in $composerFile")
             return
         }
-        lastPhpVersion = phpVersion
 
         setPhpVersion(project, phpVersion)
     }
