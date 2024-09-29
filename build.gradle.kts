@@ -25,10 +25,11 @@ val ideBuildVersion = System.getenv("IDE_BUILD_VERSION") ?: ideVersion
 val splitVersion = ideVersion.split('.')
 val buildVersion = (splitVersion[0].toInt() - 2000) * 10 + splitVersion.getOrElse(1) { "0" }.toInt()
 val pluginsVersion = mapOf(
+    232 to "232.10335.8",
     233 to "233.11799.232",
     242 to "242.20224.427",
     243 to "243.16718.32",
-)[buildVersion]
+)[buildVersion] ?: throw NullPointerException("Plugins version for IDE $ideVersion has not been configured")
 
 dependencies {
     intellijPlatform {
