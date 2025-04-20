@@ -3,12 +3,12 @@ import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 group = "me.sciberras.christian"
-version = "1.0.4"
+version = "1.0.5"
 
 plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "2.0.0"
-    id("org.jetbrains.intellij.platform") version "2.0.0"
+    id("org.jetbrains.intellij.platform") version "2.5.0"
 }
 
 repositories {
@@ -29,7 +29,15 @@ val pluginsVersion = mapOf(
     233 to "233.11799.232",
     242 to "242.20224.427",
     243 to "243.16718.32",
+    251 to "251.23774.318",
 )[buildVersion] ?: throw NullPointerException("Plugins version for IDE $ideVersion has not been configured")
+val pluginJvmTarget = mapOf(
+    232 to JvmTarget.JVM_17,
+    233 to JvmTarget.JVM_17,
+    242 to JvmTarget.JVM_17,
+    243 to JvmTarget.JVM_17,
+    251 to JvmTarget.JVM_21,
+)[buildVersion] ?: throw NullPointerException("Java version for $buildVersion has not been configured")
 
 dependencies {
     intellijPlatform {
@@ -47,7 +55,9 @@ dependencies {
 
         pluginVerifier()
         zipSigner()
-        instrumentationTools()
+        if (buildVersion < 251) {
+            instrumentationTools()
+        }
     }
 }
 
@@ -62,18 +72,17 @@ intellijPlatform {
 tasks {
     // Set the JVM compatibility versions
     withType<JavaCompile> {
-        sourceCompatibility = "17"
-        targetCompatibility = "17"
+        sourceCompatibility = JvmTarget.JVM_17.target
+        targetCompatibility = pluginJvmTarget.target
     }
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
+            jvmTarget.set(pluginJvmTarget)
         }
     }
 
     patchPluginXml {
         sinceBuild.set("232")
-        untilBuild.set("243.*")
     }
 
     signPlugin {
