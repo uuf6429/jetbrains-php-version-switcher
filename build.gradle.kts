@@ -23,21 +23,21 @@ val ideType = IntelliJPlatformType.fromCode(System.getenv("IDE_TYPE") ?: "IU")
 val ideVersion = System.getenv("IDE_VERSION") ?: "2023.2"
 val ideBuildVersion = System.getenv("IDE_BUILD_VERSION") ?: ideVersion
 val splitVersion = ideVersion.split('.')
-val buildVersion = (splitVersion[0].toInt() - 2000) * 10 + splitVersion.getOrElse(1) { "0" }.toInt()
+val platformVersion = (splitVersion[0].toInt() - 2000) * 10 + splitVersion.getOrElse(1) { "0" }.toInt()
 val pluginsVersion = mapOf(
     232 to "232.10335.8",
     233 to "233.11799.232",
     242 to "242.20224.427",
     243 to "243.16718.32",
     251 to "251.23774.318",
-)[buildVersion] ?: throw NullPointerException("Plugins version for IDE $ideVersion has not been configured")
+)[platformVersion] ?: throw NullPointerException("Plugins version for IDE $ideVersion has not been configured")
 val pluginJvmTarget = mapOf(
     232 to JvmTarget.JVM_17,
     233 to JvmTarget.JVM_17,
     242 to JvmTarget.JVM_17,
     243 to JvmTarget.JVM_17,
     251 to JvmTarget.JVM_21,
-)[buildVersion] ?: throw NullPointerException("Java version for $buildVersion has not been configured")
+)[platformVersion] ?: throw NullPointerException("Java version for $platformVersion has not been configured")
 
 dependencies {
     intellijPlatform {
@@ -48,7 +48,8 @@ dependencies {
         if (ideType === IntelliJPlatformType.IntellijIdeaUltimate) {
             intellijIdeaUltimate(ideBuildVersion)
             plugin("com.jetbrains.php:$pluginsVersion")
-            if (buildVersion > 242) {
+            // 2024.3 extracted JSON support into a plugin
+            if (platformVersion >= 243) {
                 plugin("com.intellij.modules.json:$pluginsVersion")
             }
         }
