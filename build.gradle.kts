@@ -55,9 +55,6 @@ dependencies {
 
         pluginVerifier()
         zipSigner()
-        if (buildVersion < 251) {
-            instrumentationTools()
-        }
     }
 }
 
