@@ -3,7 +3,7 @@ import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 group = "me.sciberras.christian"
-version = "1.26.0"
+version = "1.25.2"
 
 plugins {
     id("java")
@@ -83,7 +83,7 @@ tasks {
 
     patchPluginXml {
         sinceBuild.set("232")
-        untilBuild.set("260.*")
+        untilBuild.set("252.*")
     }
 
     signPlugin {
