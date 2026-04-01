@@ -1,3 +1,11 @@
+> [!WARNING]  
+> This plugin has been retired.
+> 
+> Each JetBrains IDE release keeps adding subtle breaking changes that despite not requiring and actual code changes
+> causes hours and hours of investigation and troubleshooting configuration, dependency version changes etc.
+> 
+> This is unfortunately extremely stressful and frustrating, to the point where I don't want to keep maintaining it.
+
 # PHP Version Switcher Plugin
 
 [![PhpStorm](http://img.shields.io/badge/-PHPStorm-000000?style=for-the-badge&logo=phpstorm&logoColor=white)](https://plugins.jetbrains.com/plugin/25086-php-version-switcher)
