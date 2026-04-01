@@ -3,12 +3,12 @@ import org.jetbrains.intellij.platform.gradle.extensions.intellijPlatform
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 group = "me.sciberras.christian"
-version = "1.25.3"
+version = "1.26.1"
 
 plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "2.2.0"
-    id("org.jetbrains.intellij.platform") version "2.5.0"
+    id("org.jetbrains.intellij.platform") version "2.13.1"
 }
 
 repositories {
@@ -32,6 +32,7 @@ val pluginsVersion = mapOf(
     251 to "251.23774.318",
     252 to "252.13776.59",
     253 to "253.28294.51",
+    261 to "261.22158.46",
 )[platformVersion] ?: throw NullPointerException("Plugins version for IDE $ideVersion has not been configured")
 val pluginJvmTarget = mapOf(
     232 to JvmTarget.JVM_17,
@@ -41,6 +42,7 @@ val pluginJvmTarget = mapOf(
     251 to JvmTarget.JVM_21,
     252 to JvmTarget.JVM_21,
     253 to JvmTarget.JVM_21,
+    261 to JvmTarget.JVM_21,
 )[platformVersion] ?: throw NullPointerException("Java version for $platformVersion has not been configured")
 
 dependencies {
@@ -66,7 +68,9 @@ dependencies {
 intellijPlatform {
     pluginVerification {
         ides {
-            ide(ideType, ideBuildVersion)
+            create(ideType, ideBuildVersion) {
+                useInstaller = true
+            }
         }
     }
 }
@@ -85,7 +89,7 @@ tasks {
 
     patchPluginXml {
         sinceBuild.set("232")
-        untilBuild.set("253.*")
+        untilBuild.set("261.*")
     }
 
     signPlugin {

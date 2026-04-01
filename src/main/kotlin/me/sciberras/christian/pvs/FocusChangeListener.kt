@@ -1,5 +1,8 @@
 package me.sciberras.christian.pvs
 
+import com.intellij.openapi.application.ApplicationManager
+import com.intellij.openapi.application.ModalityState
+import com.intellij.openapi.application.ReadAction
 import com.intellij.openapi.components.service
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.editor.Editor
@@ -13,47 +16,38 @@ import com.jetbrains.php.lang.PhpFileType
 
 internal class FocusChangeListener : FocusChangeListener {
     override fun focusGained(editor: Editor) {
-        if (editor.project?.service<ProjectSettings>()?.state?.enabled != true) {
-            return
-        }
+        val project = editor.project ?: return
+        val projectSettings = project.service<ProjectSettings>().state
+        if (!projectSettings.enabled) return
 
         val phpFile = FileDocumentManager.getInstance().getFile(editor.document)
-        if (phpFile == null || phpFile.fileType != PhpFileType.INSTANCE) {
-            return
-        }
-
-        val project = editor.project ?: return
-
-        if (phpFile == lastPhpFile) {
-            return
-        }
+        if (phpFile == null || phpFile.fileType != PhpFileType.INSTANCE) return
+        if (phpFile == lastPhpFile) return
         lastPhpFile = phpFile
 
-        val composerFile = phpFile.findNearestFile("composer.json")
-        if (composerFile == lastComposerFile) {
-            return
+        val (composerFile, phpVersion) = ReadAction.compute<Pair<VirtualFile?, PhpLanguageLevel?>, RuntimeException> {
+            val cFile = phpFile.findNearestFile("composer.json")
+            val pVersion = cFile?.findPhpVersion(project)
+            cFile to pVersion
         }
 
-        lastComposerFile = composerFile
+        ApplicationManager.getApplication().invokeLater({
+            if (composerFile == null) {
+                thisLogger().debug("Composer file not found in any parent directory of $phpFile")
+                return@invokeLater
+            }
+            if (composerFile == lastComposerFile) return@invokeLater
+            lastComposerFile = composerFile
 
-        if (composerFile == null) {
-            thisLogger().debug("Composer file not found in any parent directory of $phpFile")
-            return
-        }
+            if (phpVersion == null) {
+                thisLogger().debug("PHP not set as a requirement in $composerFile")
+                return@invokeLater
+            }
+            if (phpVersion == lastPhpVersion) return@invokeLater
+            lastPhpVersion = phpVersion
 
-        val phpVersion = composerFile.findPhpVersion(project)
-        if (phpVersion == lastPhpVersion) {
-            return
-        }
-
-        lastPhpVersion = phpVersion
-
-        if (phpVersion == null) {
-            thisLogger().debug("PHP not set as a requirement in $composerFile")
-            return
-        }
-
-        setPhpVersion(project, phpVersion)
+            setPhpVersion(project, phpVersion)
+        }, ModalityState.defaultModalityState())
     }
 
     private fun setPhpVersion(project: Project, phpVersion: PhpLanguageLevel) {
