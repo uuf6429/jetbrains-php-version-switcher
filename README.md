@@ -1,7 +1,7 @@
 > [!WARNING]  
 > This plugin has been retired.
 > 
-> Each JetBrains IDE release keeps adding subtle breaking changes that despite not requiring and actual code changes
+> Each JetBrains IDE release keeps adding subtle breaking changes that, despite not requiring any actual code changes,
 > causes hours and hours of investigation and troubleshooting configuration, dependency version changes etc.
 > 
 > This is unfortunately extremely stressful and frustrating, to the point where I don't want to keep maintaining it.
